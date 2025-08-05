@@ -18,6 +18,7 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.DASHBOARD);
   const [session, setSession] = useState<Session | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -83,10 +84,29 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-navy-900 text-gray-200 font-sans">
-      <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      
+      <Sidebar 
+        currentView={currentView} 
+        setCurrentView={setCurrentView}
+        isMobileMenuOpen={isMobileMenuOpen}
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
+      />
+      
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header title={viewTitles[currentView]} session={session} handleSignOut={() => supabase.auth.signOut()} />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-navy-900 p-8">
+        <Header 
+          title={viewTitles[currentView]} 
+          session={session} 
+          handleSignOut={() => supabase.auth.signOut()}
+          onMobileMenuClick={() => setIsMobileMenuOpen(true)}
+        />
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-navy-900 p-4 sm:p-6 lg:p-8">
           {renderView()}
         </main>
       </div>

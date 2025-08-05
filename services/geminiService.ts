@@ -1,7 +1,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { TechnicalAuditResult, SiteAuditResult, ContentBrief, SerpSimulationResult } from '../types';
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.GEMINI_API_KEY;
 
 // Check if the Gemini API is configured, but don't crash the app if it's not.
 const isGeminiConfigured = !!API_KEY;
